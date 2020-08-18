@@ -1,0 +1,41 @@
+server:
+  port: 8080
+  address: 0.0.0.0
+spring:
+  profiles:
+    # 外置jdbc、redis和mail配置文件
+    active: jdbc,redis,mail
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 500MB
+
+  thymeleaf:
+    prefix: classpath:/templates/
+
+# MyBatis配置
+mybatis:
+  configuration:
+    #开启驼峰命名匹配映射
+    map-underscore-to-camel-case: true
+  #配置MyBatis的xml映射文件路径
+  mapper-locations: classpath:mapper/*.xml
+  #配置XML映射文件中指定的实体类别名路径
+  type-aliases-package: com.kkindom_blog.model.domain
+
+#浏览器cookie相关设置
+COOKIE:
+  # 设置cookie默认时长为30分钟
+  VALIDITY: 1800
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+file:
+  #文件上传目录（注意Linux和Windows上的目录结构不同）
+  uploadFolder: C:/File_rec/
+  #静态资源对外暴露的访问路径
+  staticAccessPath: /uploadfile/**
+  # 上传的服务器上的映射文件夹
+  accessPath: /uploadfile/
