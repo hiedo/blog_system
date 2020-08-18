@@ -1,13 +1,17 @@
 package com.zsc.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zsc.blog.Utils.RedisUtil;
 import com.zsc.blog.entity.TUser;
 import com.zsc.blog.mapper.TUserMapper;
 import com.zsc.blog.service.ITUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,6 +27,8 @@ import java.util.List;
 public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements ITUserService {
     @Autowired
     TUserMapper tUserMapper;
+    @Resource
+    RedisUtil redisUtil;
     //查询所有用户
     @Override
     public Collection<?> selectList(Object o) {
@@ -42,7 +48,20 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
     }
     //插入用户
     @Override
-    public void insert_user(TUser tUser) {
+    public void insert_user(TUser tUser)
+    {
+        redisUtil.set(tUser.getUsername(),tUser);
         tUserMapper.insert(tUser);
+    }
+
+    @Override
+    public void updata_I(TUser tUser) {
+        tUserMapper.updateById(tUser);
+    }
+
+    @Override
+    public int find_usercount(String username) {
+      int count=  tUserMapper.selectCount(new QueryWrapper<TUser>().eq("username", username));
+        return count;
     }
 }

@@ -4,8 +4,8 @@ import lombok.Data;
 
 /**
  * @program: demo
- * @description: mff
- * @author: Mr.Wang
+ * @description: 响应体类
+ * @author: 某网络大神
  * @create: 2020-07-24 17:30
  **/
 @Data
@@ -17,13 +17,18 @@ public class ResponseData<T> extends BaseResponse {
     private T data;
     private Integer num;
 
-    private ResponseData(CodeEnum code) {
+    public ResponseData(CodeEnum code) {
         super(code);
     }
 
     public ResponseData(CodeEnum code, T data) {
         super(code);
         this.data = data;
+    }
+    public ResponseData(CodeEnum code, T data,int num) {
+        super(code);
+        this.data = data;
+        this.num=num;
     }
 
     /**
@@ -40,4 +45,7 @@ public class ResponseData<T> extends BaseResponse {
         return new ResponseData<>(code, data);
     }
     // 省略get/set方法
+    public static <T> ResponseData<T> out(CodeEnum code, T data,int num) {
+        return new ResponseData<>(code, data,num);
+    }
 }
